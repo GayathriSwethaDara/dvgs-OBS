@@ -219,18 +219,21 @@ button:hover {
         <div class="left-section"></div>
         <div class="right-section">
             <div class="login-container">
-                <form class="login-form" action="/home">
-                    <h2 class="login-title"><i class="fas fa-user-circle"></i> Login</h2>
-                    <div class="form-control">
-                        <i class="fas fa-user icon"></i>
-                        <input type="text" placeholder="Username" id="username" required>
-                    </div>
-                    <div class="form-control">
-                        <i class="fas fa-lock icon"></i>
-                        <input type="password" placeholder="Password" id="password" >
-                    </div>
-                    <button type="submit">Login</button>
-                </form>
+               <form class="login-form" action="/home" method="GET,POST">
+    <h2 class="login-title"><i class="fas fa-user-circle"></i> Login</h2>
+    <div class="form-control">
+        <i class="fas fa-user icon"></i>
+        <input type="text" name="username" placeholder="Username" required>
+    </div>
+    <div class="form-control">
+        <i class="fas fa-lock icon"></i>
+        <input type="password" name="password" placeholder="Password" required>
+    </div>
+    <button type="submit">Login</button>
+    <br>
+    <h3>Don't have an account?</h3><a href="/register">Create an account</a>
+</form>
+
             </div>
         </div>
     </div>
