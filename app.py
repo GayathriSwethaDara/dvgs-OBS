@@ -1,9 +1,35 @@
 from flask import *
+from pymongo import MongoClient
 
 app = Flask(__name__)
 
-@app.route('/')
+client=MongoClient("mongodb+srv://swetha:swetha@cluster0.wagornv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+db=client.get_database('total_records')
+records = db.register
+@app.route('/',methods=['post','get'])
 def index():
+    msg=""
+    if "email" in session:
+        return redirect(url_for("login"))
+    if request.method=="POST":
+        username=request.form.get("username")
+        email=request.form.get("email")
+        password=request.form.get("password")
+        user_found=records.find_one({"username":username})
+        email_found=records.find_one({"email":email})
+        if user_found:
+            msg="There is already user by that name"
+            return render_template('register.html',msg=msg)
+        if email_found:
+            msg="There email already exists in database"
+            return render_template('register.html',msg=msg)
+        else:
+            user_input={'username':username, 'email':email, 'password':password}
+            records.insert_one(user_input)
+
+            user_data=records.find_one({"email":email})
+            new_email=user_data["email"]
+            return render_template('login.html')
     return render_template('login.html')
 
 @app.route('/genre')
