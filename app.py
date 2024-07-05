@@ -57,6 +57,10 @@ def logout():
 def genre():
     return render_template('genre.html')
 
+@app.route('/favourites')
+def wishlist():
+    return render_template('favourites.html')
+
 @app.route('/home')
 def home():
     return render_template('home.html')

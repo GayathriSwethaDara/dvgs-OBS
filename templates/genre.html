@@ -3,36 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Genre</title>
-  <style>
- body{
- background-color: #FBFCE2 ;
- }
-    .test {
-  margin: 24px;
-  width: 280px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition-duration: 0.25s;
-}
-.test:hover {
-  background-color: var(--backgroundColor);
-  box-shadow: var(--boxShadow);
-}
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-img {
-  width: 280px;
-  height: 155px;
-  object-fit: cover;
-  border-radius: 12px;
-}
-.content {
-  margin-top: 6px;
-}
-.left-button {
+    <style>
+        body {
+            background-color: #FBFCE2;
+        }
+
+        .test {
+            margin: 24px;
+            width: 280px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition-duration: 0.25s;
+        }
+
+        .test:hover {
+            background-color: var(--backgroundColor);
+            box-shadow: var(--boxShadow);
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        img {
+            width: 280px;
+            height: 155px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .content {
+            margin-top: 6px;
+        }
+
+        .left-button {
             position: absolute;
             top: 20px;
             left: 20px;
@@ -44,62 +50,130 @@ img {
             border-radius: 5px;
             cursor: pointer;
         }
-  </style>
-  <a href="/home"><button class="left-button">Back to Home</button></a>
-	<!--Font Awesome Icons-->
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            display: none; /* Initially hide the table */
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+    </style>
+    <a href="/home"><button class="left-button">Back to Home</button></a>
+    <!--Font Awesome Icons-->
     <script src="https://kit.fontawesome.com/d5635d350d.js" crossorigin="anonymous"></script>
 
 </head>
 <body>
-<center><h1><i class="fa-solid fa-face-laugh-beam" style="color: #ffc800;"></i>  Explore Your Favourite Genre  <i class="fa-solid fa-face-laugh-wink" style="color: #ffc800;"></i></h1></center>
+<center><h1><i class="fa-solid fa-face-laugh-beam" style="color: #ffc800;"></i> Explore Your Favourite Genre <i class="fa-solid fa-face-laugh-wink" style="color: #ffc800;"></i></h1></center>
 <div class="container">
-   <div class="test">
-    <a href="/fiction"><img src="https://fivebooks.com/images/brjfwPAq69-IDEX2/plain/fb/2022/11/fiction-books-category-share-image.jpg" /></a>
-    <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
-  </div>
-  <div class="test">
-    <a href="/novel"><img src="https://ei7cr2pn3uw.exactdn.com/wp-content/uploads/2021/01/Novel.jpg?strip=all&lossy=1&ssl=1" /></a>
-    <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
-  </div>
-  <div class="test">
-    <a href="/biography"><img src="https://media.istockphoto.com/id/1062945726/photo/biography-on-book-concept.jpg?s=612x612&w=0&k=20&c=m5XWhBMSgvK9SMeHd0AiChbGivoJWASQOkFzyQQXs1I=" /></a>
-    <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
-  </div>
-  <div class="test">
-    <a href="/mystery"><img src="https://www.onceuponabookclub.com/cdn/shop/articles/Screenshot_2023-05-22_133212.png?v=1705329492" /></a>
-    <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
-  </div>
-  <div class="test">
-    <a href="/floklore"><img src="https://img.wattpad.com/cover/240087154-256-k417684.jpg" /></a>
-    <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
-  </div>
-  <div class="test">
-    <a href="/comedy"><img src="https://cdn.dribbble.com/users/6217343/screenshots/16586789/comedy_4x.jpg" /></a>
-    <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
-  </div>
-  <div class="test">
-    <a href="/horror"><img src="https://storygrid.com/wp-content/uploads/2022/05/Copy-of-Love-Genre.png" /></a>
-    <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
-  </div>
-  <div class="test">
-    <a href="/poetry"><img src="https://t4.ftcdn.net/jpg/05/59/84/45/360_F_559844504_rINss4VqiJrmlueo64HayvCr0ToWlD7Y.jpg" /></a>
-    <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
-  </div>
-
+    <div class="test" onclick="showBooks('Fiction')">
+        <img src="https://fivebooks.com/images/brjfwPAq69-IDEX2/plain/fb/2022/11/fiction-books-category-share-image.jpg" />
+        <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
+    </div>
+    <div class="test" onclick="showBooks('Novel')">
+        <img src="https://ei7cr2pn3uw.exactdn.com/wp-content/uploads/2021/01/Novel.jpg?strip=all&lossy=1&ssl=1" />
+        <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
+    </div>
+    <div class="test" onclick="showBooks('Biography')">
+        <img src="https://media.istockphoto.com/id/1062945726/photo/biography-on-book-concept.jpg?s=612x612&w=0&k=20&c=m5XWhBMSgvK9SMeHd0AiChbGivoJWASQOkFzyQQXs1I=" />
+        <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
+    </div>
+    <div class="test" onclick="showBooks('Mystery')">
+        <img src="https://www.onceuponabookclub.com/cdn/shop/articles/Screenshot_2023-05-22_133212.png?v=1705329492" />
+        <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
+    </div>
+    <div class="test" onclick="showBooks('Folklore')">
+        <img src="https://img.wattpad.com/cover/240087154-256-k417684.jpg" />
+        <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
+    </div>
+    <div class="test" onclick="showBooks('Comedy')">
+        <img src="https://cdn.dribbble.com/users/6217343/screenshots/16586789/comedy_4x.jpg" />
+        <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
+    </div>
+    <div class="test" onclick="showBooks('Horror')">
+        <img src="https://storygrid.com/wp-content/uploads/2022/05/Copy-of-Love-Genre.png" />
+        <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
+    </div>
+    <div class="test" onclick="showBooks('Poetry')">
+        <img src="https://t4.ftcdn.net/jpg/05/59/84/45/360_F_559844504_rINss4VqiJrmlueo64HayvCr0ToWlD7Y.jpg" />
+        <div class="content">Let's explore <i class="fa-solid fa-arrow-up-right-from-square" style="color: #ea6f66;"></i></div>
+    </div>
 </div>
-<script>
-	const testElements = document.querySelectorAll(".test");
-testElements.forEach((element) => {
-  const min = 220;
-  const max = 240;
-  const r = Math.floor(Math.random() * (max - min + 1)) + min;
-  const g = Math.floor(Math.random() * (max - min + 1)) + min;
-  const b = Math.floor(Math.random() * (max - min + 1)) + min;
-  let a = document.getElementById("test");
-  element.style.setProperty("--backgroundColor", `rgb(${r},${g},${b})`);
-  element.style.setProperty("--boxShadow", `0 0 0 12px rgb(${r},${g},${b})`);
-});
 
+<!-- Book List Table -->
+<section class="book-list section">
+    <h2 class="section__title-2"><span>Book List</span></h2>
+    <div class="container">
+        <table id="bookTable">
+            <thead>
+                <tr>
+                    <th>Book ID</th>
+                    <th>Book Name</th>
+                    <th>Author</th>
+                    <th>Genre</th>
+                </tr>
+            </thead>
+            <tbody id="bookTableBody">
+                <!-- Dynamic content will be added here -->
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+    const books = [
+        { id: 1, name: "To Kill a Mockingbird", author: "Harper Lee", genre: "Fiction" },
+        { id: 2, name: "Pride and Prejudice", author: "Jane Austen", genre: "Novel" },
+        { id: 3, name: "The Diary of a Young Girl", author: "Anne Frank", genre: "Biography" },
+        { id: 4, name: "The Girl with the Dragon Tattoo", author: "Stieg Larsson", genre: "Mystery" },
+        { id: 5, name: "The Alchemist", author: "Paulo Coelho", genre: "Folklore" },
+        { id: 6, name: "Good Omens", author: "Neil Gaiman & Terry Pratchett", genre: "Comedy" },
+        { id: 7, name: "It", author: "Stephen King", genre: "Horror" },
+        { id: 8, name: "The Raven", author: "Edgar Allan Poe", genre: "Poetry" }
+    ];
+
+    function showBooks(genre) {
+        const table = document.getElementById('bookTable');
+        const tbody = document.getElementById('bookTableBody');
+        tbody.innerHTML = '';
+
+        const filteredBooks = books.filter(book => book.genre === genre);
+
+        filteredBooks.forEach(book => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${book.id}</td>
+                <td>${book.name}</td>
+                <td>${book.author}</td>
+                <td>${book.genre}</td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        table.style.display = filteredBooks.length ? 'table' : 'none';
+    }
+
+    // Initialize the random background colors for genres
+    const testElements = document.querySelectorAll(".test");
+    testElements.forEach((element) => {
+        const min = 220;
+        const max = 240;
+        const r = Math.floor(Math.random() * (max - min + 1)) + min;
+        const g = Math.floor(Math.random() * (max - min + 1)) + min;
+        const b = Math.floor(Math.random() * (max - min + 1)) + min;
+        element.style.setProperty("--backgroundColor", `rgb(${r},${g},${b})`);
+        element.style.setProperty("--boxShadow", `0 0 0 12px rgb(${r},${g},${b})`);
+    });
 </script>
 </body>
 </html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Added Books</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Added Books</h1>
+    <table id="added-books-table">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Book Name</th>
+                <th>No. of Books Available</th>
+                <th>Remove from List</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- The added books will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Get the added books from localStorage (or any other data source)
+        let addedBooks = JSON.parse(localStorage.getItem('addedBooks')) || [];
+
+        // Get the table body element
+        let tableBody = document.getElementById('added-books-table').getElementsByTagName('tbody')[0];
+
+        // Loop through the added books and add them to the table
+        addedBooks.forEach((book, index) => {
+            let row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${book.name}</td>
+                <td>${book.available}</td>
+                <td><button onclick="removeBook(${index})">Remove</button></td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        // Function to remove a book from the list
+        function removeBook(index) {
+            // Remove the book from the addedBooks array
+            addedBooks.splice(index, 1);
+
+            // Update the localStorage
+            localStorage.setItem('addedBooks', JSON.stringify(addedBooks));
+
+            // Refresh the table
+            location.reload();
+        }
+    </script>
+</body>
+</html>
