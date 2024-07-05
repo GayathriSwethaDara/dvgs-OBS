@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Book</title>
+    <style>
+        body {
+    background-color: #FBFCE2;
+}
+
+.left-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #EB7C77;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+h1 {
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+label, input {
+    font-family: Arial, sans-serif;
+    margin-bottom: 10px;
+    display: block;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+img {
+    max-width: 100px;
+}
+
+    </style>
+</head>
+<body>
+<a href="/admin_home"><button class="left-button">Back to Home</button></a>
+<center><h1>Add New Book</h1></center>
+<form method="POST" action="/addbook">
+    <label for="name">Book Name:</label><br>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="author">Author:</label><br>
+    <input type="text" id="author" name="author" required><br><br>
+
+    <label for="genre">Genre:</label><br>
+    <input type="text" id="genre" name="genre" required><br><br>
+
+    <label for="image_url">Image URL:</label><br>
+    <input type="text" id="image_url" name="image_url" required><br><br>
+
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>
