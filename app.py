@@ -128,5 +128,12 @@ def viewbook():
     books = list(books_collection.find())
     return render_template('viewbook.html', books=books)
 
+@app.route('/genre/<genre_name>', methods=['GET'])
+def view_genre(genre_name):
+    books = list(books_collection.find({"genre": genre_name}))
+    print(f"Books in genre {genre_name}:", books)  # Debug print statement
+    return render_template('viewbookgenre.html', books=books, genre=genre_name)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
