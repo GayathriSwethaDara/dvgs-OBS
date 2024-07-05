@@ -1,36 +1,57 @@
-from flask import *
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from pymongo import MongoClient
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'
 
-client=MongoClient("mongodb+srv://swetha:swetha@cluster0.wagornv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-db=client.get_database('total_records')
-records = db.register
-@app.route('/',methods=['post','get'])
+client = MongoClient("mongodb+srv://admin123:admin123@obs.jv4itlw.mongodb.net/?retryWrites=true&w=majority&appName=OBS")
+db = client['book']
+sample = db.VALUES
+
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    msg=""
     if "email" in session:
-        return redirect(url_for("login"))
-    if request.method=="POST":
-        username=request.form.get("username")
-        email=request.form.get("email")
-        password=request.form.get("password")
-        user_found=records.find_one({"username":username})
-        email_found=records.find_one({"email":email})
-        if user_found:
-            msg="There is already user by that name"
-            return render_template('register.html',msg=msg)
-        if email_found:
-            msg="There email already exists in database"
-            return render_template('register.html',msg=msg)
+        return redirect(url_for("home"))
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        user = sample.find_one({"email": email})
+        if user and user["password"] == password:
+            session["email"] = email
+            return redirect(url_for("home"))
         else:
-            user_input={'username':username, 'email':email, 'password':password}
-            records.insert_one(user_input)
-
-            user_data=records.find_one({"email":email})
-            new_email=user_data["email"]
+            flash("Invalid login credentials")
             return render_template('login.html')
     return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        user_found = sample.find_one({'username': username})
+        email_found = sample.find_one({'email': email})
+
+        if user_found:
+            flash('There is already a user by that name')
+            return render_template('register.html')
+
+        if email_found:
+            flash('The email already exists in the database')
+            return render_template('register.html')
+
+        user_input = {'username': username, 'email': email, 'password': password}
+        sample.insert_one(user_input)
+        return redirect(url_for('index'))
+
+    return render_template('register.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('email', None)
+    return redirect(url_for('index'))
 
 @app.route('/genre')
 def genre():
@@ -56,9 +77,9 @@ def biography():
 def mystery():
     return render_template('mystery.html')
 
-@app.route('/floklore')
-def floklore():
-    return render_template('floklore.html')
+@app.route('/folklore')
+def folklore():
+    return render_template('folklore.html')
 
 @app.route('/comedy')
 def comedy():
