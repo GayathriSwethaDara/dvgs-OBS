@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -8,6 +9,7 @@ client = MongoClient("mongodb+srv://admin123:admin123@obs.jv4itlw.mongodb.net/?r
 db = client['book']
 sample = db.VALUES
 books_collection = db.addbooks
+favorites_collection = db.favorites  # Add this collection
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -68,7 +70,11 @@ def genre():
 
 @app.route('/favourites')
 def wishlist():
-    return render_template('favourites.html')
+    if 'email' not in session:
+        return redirect(url_for('index'))
+    email = session['email']
+    favorites = list(favorites_collection.find({'email': email}))
+    return render_template('favourites.html', books=favorites)
 
 @app.route('/home')
 def home():
@@ -131,9 +137,38 @@ def viewbook():
 @app.route('/genre/<genre_name>', methods=['GET'])
 def view_genre(genre_name):
     books = list(books_collection.find({"genre": genre_name}))
-    print(f"Books in genre {genre_name}:", books)  # Debug print statement
     return render_template('viewbookgenre.html', books=books, genre=genre_name)
 
+@app.route('/add_to_favourites', methods=['POST'])
+def add_to_favourites():
+    if 'email' not in session:
+        return jsonify({'success': False, 'message': 'User not logged in'})
+    email = session['email']
+    data = request.get_json()
+    book_id = data.get('book_id')
+    if not book_id:
+        return jsonify({'success': False, 'message': 'Book ID is missing'})
+    book = books_collection.find_one({'_id': ObjectId(book_id)})
+    if book:
+        favorite = favorites_collection.find_one({'email': email, 'book_id': book_id})
+        if not favorite:
+            favorite_data = {'email': email, 'book_id': book_id}
+            favorite_data.update(book)
+            favorites_collection.insert_one(favorite_data)
+        return jsonify({'success': True, 'message': 'Book added to favourites'})
+    return jsonify({'success': False, 'message': 'Book not found'})
+
+@app.route('/remove_from_favourites', methods=['POST'])
+def remove_from_favourites():
+    if 'email' not in session:
+        return jsonify({'success': False, 'message': 'User not logged in'})
+    email = session['email']
+    data = request.get_json()
+    book_id = data.get('book_id')
+    if not book_id:
+        return jsonify({'success': False, 'message': 'Book ID is missing'})
+    favorites_collection.delete_one({'email': email, 'book_id': book_id})
+    return jsonify({'success': True, 'message': 'Book removed from favourites'})
 
 if __name__ == '__main__':
     app.run(debug=True)

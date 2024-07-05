@@ -1,68 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Added Books</title>
+    <meta charset="UTF-8">
+    <title>My Favorites</title>
     <style>
+        body {
+            background-color: #FBFCE2;
+        }
+        .left-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #EB7C77;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        h1 {
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
         table {
-            width: 100%;
+            width: 80%;
+            margin: 0 auto;
             border-collapse: collapse;
         }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
         th, td {
-            padding: 8px;
+            padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
         }
         th {
             background-color: #f2f2f2;
         }
+        img {
+            max-width: 100px;
+        }
+        .remove-button {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .remove-button:hover {
+            background-color: #ff3333;
+        }
     </style>
 </head>
 <body>
-    <h1>Added Books</h1>
-    <table id="added-books-table">
-        <thead>
-            <tr>
-                <th>S.No</th>
-                <th>Book Name</th>
-                <th>No. of Books Available</th>
-                <th>Remove from List</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- The added books will be dynamically inserted here -->
-        </tbody>
-    </table>
+<a href="/home"><button class="left-button">Back to Home</button></a>
+<center><h1>My Favorites</h1></center>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Author</th>
+            <th>Genre</th>
+            <th>Image</th>
+            <th>Remove</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+            <td>{{ book.name }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.genre }}</td>
+            <td><img src="{{ book.image_url }}" alt="{{ book.name }}"></td>
+            <td><button class="remove-button" onclick="removeFromFavorites('{{ book.book_id }}', this)">Remove</button></td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5">No favorite books found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-    <script>
-        // Get the added books from localStorage (or any other data source)
-        let addedBooks = JSON.parse(localStorage.getItem('addedBooks')) || [];
-
-        // Get the table body element
-        let tableBody = document.getElementById('added-books-table').getElementsByTagName('tbody')[0];
-
-        // Loop through the added books and add them to the table
-        addedBooks.forEach((book, index) => {
-            let row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${book.name}</td>
-                <td>${book.available}</td>
-                <td><button onclick="removeBook(${index})">Remove</button></td>
-            `;
-            tableBody.appendChild(row);
+<script>
+    function removeFromFavorites(bookId, button) {
+        fetch('/remove_from_favourites', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ book_id: bookId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove the row from the table
+                const row = button.closest('tr');
+                row.remove();
+            } else {
+                alert(data.message);
+            }
         });
-
-        // Function to remove a book from the list
-        function removeBook(index) {
-            // Remove the book from the addedBooks array
-            addedBooks.splice(index, 1);
-
-            // Update the localStorage
-            localStorage.setItem('addedBooks', JSON.stringify(addedBooks));
-
-            // Refresh the table
-            location.reload();
-        }
-    </script>
+    }
+</script>
 </body>
 </html>
