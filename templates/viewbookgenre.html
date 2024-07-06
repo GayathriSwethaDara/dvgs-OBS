@@ -113,7 +113,11 @@
             <td>{{ book.genre }}</td>
             <td><img src="{{ book.image_url }}" alt="{{ book.name }}"></td>
             <td>
+                {% if book._id|string in favorite_ids %}
+                <button class="added-button" disabled>Added</button>
+                {% else %}
                 <button class="add-button" onclick="addToWishlist('{{ book._id }}', this)">Add</button>
+                {% endif %}
             </td>
         </tr>
         {% else %}

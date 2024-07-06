@@ -134,11 +134,6 @@ def viewbook():
     books = list(books_collection.find())
     return render_template('viewbook.html', books=books)
 
-@app.route('/genre/<genre_name>', methods=['GET'])
-def view_genre(genre_name):
-    books = list(books_collection.find({"genre": genre_name}))
-    return render_template('viewbookgenre.html', books=books, genre=genre_name)
-
 @app.route('/add_to_favourites', methods=['POST'])
 def add_to_favourites():
     if 'email' not in session:
@@ -169,6 +164,17 @@ def remove_from_favourites():
         return jsonify({'success': False, 'message': 'Book ID is missing'})
     favorites_collection.delete_one({'email': email, 'book_id': book_id})
     return jsonify({'success': True, 'message': 'Book removed from favourites'})
+
+@app.route('/genre/<genre_name>', methods=['GET'])
+def view_genre(genre_name):
+    if 'email' not in session:
+        return redirect(url_for('index'))
+    email = session['email']
+    books = list(books_collection.find({"genre": genre_name}))
+    favorites = list(favorites_collection.find({'email': email}))
+    favorite_ids = {fav['book_id'] for fav in favorites}  # Set of favorite book IDs
+    return render_template('viewbookgenre.html', books=books, genre=genre_name, favorite_ids=favorite_ids)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
