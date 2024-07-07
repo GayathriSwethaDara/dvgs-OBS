@@ -25,7 +25,7 @@
         }
         form {
             max-width: 400px;
-            margin: 0 auto;
+            margin: 0 auto 20px;
             text-align: left;
         }
         label, input {
@@ -95,6 +95,13 @@
 <body>
 <a href="/genre"><button class="left-button">Back to Genres</button></a>
 <center><h1>View Books{% if genre %} in {{ genre | capitalize }}{% endif %}</h1></center>
+
+<form method="get" action="">
+    <input type="hidden" name="genre_name" value="{{ genre }}">
+    <input type="text" name="search" placeholder="Search for a book or author" value="{{ search_query or '' }}">
+    <input type="submit" value="Search">
+</form>
+
 <table>
     <thead>
         <tr>
@@ -106,25 +113,27 @@
         </tr>
     </thead>
     <tbody>
-        {% for book in books %}
-        <tr>
-            <td>{{ book.name }}</td>
-            <td>{{ book.author }}</td>
-            <td>{{ book.genre }}</td>
-            <td><img src="{{ book.image_url }}" alt="{{ book.name }}"></td>
-            <td>
-                {% if book._id|string in favorite_ids %}
-                <button class="added-button" disabled>Added</button>
-                {% else %}
-                <button class="add-button" onclick="addToWishlist('{{ book._id }}', this)">Add</button>
-                {% endif %}
-            </td>
-        </tr>
+        {% if books %}
+            {% for book in books %}
+            <tr>
+                <td>{{ book.name }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.genre }}</td>
+                <td><img src="{{ book.image_url }}" alt="{{ book.name }}"></td>
+                <td>
+                    {% if book._id|string in favorite_ids %}
+                    <button class="added-button" disabled>Added</button>
+                    {% else %}
+                    <button class="add-button" onclick="addToWishlist('{{ book._id }}', this)">Add</button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
         {% else %}
-        <tr>
-            <td colspan="5">No books available.</td>
-        </tr>
-        {% endfor %}
+            <tr>
+                <td colspan="5">No books found.</td>
+            </tr>
+        {% endif %}
     </tbody>
 </table>
 

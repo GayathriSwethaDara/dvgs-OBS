@@ -165,15 +165,29 @@ def remove_from_favourites():
     favorites_collection.delete_one({'email': email, 'book_id': book_id})
     return jsonify({'success': True, 'message': 'Book removed from favourites'})
 
+
 @app.route('/genre/<genre_name>', methods=['GET'])
 def view_genre(genre_name):
     if 'email' not in session:
         return redirect(url_for('index'))
     email = session['email']
-    books = list(books_collection.find({"genre": genre_name}))
+    search_query = request.args.get('search', '')
+
+    if search_query:
+        books = list(books_collection.find({
+            "genre": genre_name,
+            "$or": [
+                {"name": {"$regex": search_query, "$options": "i"}},
+                {"author": {"$regex": search_query, "$options": "i"}}
+            ]
+        }))
+    else:
+        books = list(books_collection.find({"genre": genre_name}))
+
     favorites = list(favorites_collection.find({'email': email}))
-    favorite_ids = {fav['book_id'] for fav in favorites}  # Set of favorite book IDs
-    return render_template('viewbookgenre.html', books=books, genre=genre_name, favorite_ids=favorite_ids)
+    favorite_ids = {str(fav['book_id']) for fav in favorites}  # Set of favorite book IDs
+
+    return render_template('viewbookgenre.html', books=books, genre=genre_name, favorite_ids=favorite_ids, search_query=search_query)
 
 
 if __name__ == '__main__':
