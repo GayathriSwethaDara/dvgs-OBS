@@ -73,8 +73,20 @@ def wishlist():
     if 'email' not in session:
         return redirect(url_for('index'))
     email = session['email']
-    favorites = list(favorites_collection.find({'email': email}))
-    return render_template('favourites.html', books=favorites)
+    search_query = request.args.get('search', '')
+
+    if search_query:
+        favorites = list(favorites_collection.find({
+            'email': email,
+            "$or": [
+                {"name": {"$regex": search_query, "$options": "i"}},
+                {"author": {"$regex": search_query, "$options": "i"}}
+            ]
+        }))
+    else:
+        favorites = list(favorites_collection.find({'email': email}))
+
+    return render_template('favourites.html', books=favorites, search_query=search_query)
 
 @app.route('/home')
 def home():

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Favorites</title>
+    <title>Favourite Books</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
@@ -28,6 +28,29 @@
             font-family: Arial, sans-serif;
             color: #333;
         }
+        form.search-form {
+            max-width: 400px;
+            margin: 0 auto 20px;
+            text-align: left;
+        }
+        form.search-form input[type="text"] {
+            width: 70%;
+            padding: 8px;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        form.search-form input[type="submit"] {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        form.search-form input[type="submit"]:hover {
+            background-color: #45a049;
+        }
         table {
             width: 80%;
             margin: 0 auto;
@@ -46,8 +69,8 @@
         img {
             max-width: 100px;
         }
-        .remove-button {
-            background-color: #ff4d4d;
+        .add-button {
+            background-color: #EB7C77;
             color: white;
             padding: 8px 16px;
             border: none;
@@ -55,14 +78,23 @@
             cursor: pointer;
             font-size: 14px;
         }
-        .remove-button:hover {
-            background-color: #ff3333;
+        .add-button:hover {
+            background-color: #EB7C77;
+        }
+        .added-button {
+            background-color: #ccc;
+            color: #666;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: not-allowed;
         }
     </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/">Book Store</a>
+    <a class="navbar-brand" href="/">United Bookworms</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -95,7 +127,14 @@
         </ul>
     </div>
 </nav>
-<center><h1>My Favorites</h1></center>
+<center><h1>View Books{% if genre %} in {{ genre | capitalize }}{% endif %}</h1></center>
+
+<form method="get" action="" class="search-form">
+    <input type="hidden" name="genre_name" value="{{ genre }}">
+    <input type="text" name="search" placeholder="Search for a book or author" value="{{ search_query or '' }}">
+    <input type="submit" value="Search">
+</form>
+
 <table>
     <thead>
         <tr>
@@ -103,29 +142,37 @@
             <th>Author</th>
             <th>Genre</th>
             <th>Image</th>
-            <th>Remove</th>
+            <th>Add to Wishlist</th>
         </tr>
     </thead>
     <tbody>
-        {% for book in books %}
-        <tr>
-            <td>{{ book.name }}</td>
-            <td>{{ book.author }}</td>
-            <td>{{ book.genre }}</td>
-            <td><img src="{{ book.image_url }}" alt="{{ book.name }}"></td>
-            <td><button class="remove-button" onclick="removeFromFavorites('{{ book.book_id }}', this)">Remove</button></td>
-        </tr>
+        {% if books %}
+            {% for book in books %}
+            <tr>
+                <td>{{ book.name }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.genre }}</td>
+                <td><img src="{{ book.image_url }}" alt="{{ book.name }}"></td>
+                <td>
+                    {% if book._id|string in favorite_ids %}
+                    <button class="added-button" disabled>Added</button>
+                    {% else %}
+                    <button class="add-button" onclick="addToWishlist('{{ book._id }}', this)">Add</button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
         {% else %}
-        <tr>
-            <td colspan="5">No favorite books found.</td>
-        </tr>
-        {% endfor %}
+            <tr>
+                <td colspan="5">No books found.</td>
+            </tr>
+        {% endif %}
     </tbody>
 </table>
 
 <script>
-    function removeFromFavorites(bookId, button) {
-        fetch('/remove_from_favourites', {
+    function addToWishlist(bookId, button) {
+        fetch('/add_to_favourites', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -135,9 +182,10 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Remove the row from the table
-                const row = button.closest('tr');
-                row.remove();
+                button.classList.remove('add-button');
+                button.classList.add('added-button');
+                button.textContent = "Added";
+                button.disabled = true;
             } else {
                 alert(data.message);
             }
