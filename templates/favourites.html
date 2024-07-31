@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Favourite Books</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
@@ -69,7 +69,7 @@
         img {
             max-width: 100px;
         }
-        .add-button {
+        .remove-button {
             background-color: #EB7C77;
             color: white;
             padding: 8px 16px;
@@ -78,17 +78,8 @@
             cursor: pointer;
             font-size: 14px;
         }
-        .add-button:hover {
+        .remove-button:hover {
             background-color: #EB7C77;
-        }
-        .added-button {
-            background-color: #ccc;
-            color: #666;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: not-allowed;
         }
     </style>
 </head>
@@ -127,10 +118,10 @@
         </ul>
     </div>
 </nav>
-<center><h1>View Books{% if genre %} in {{ genre | capitalize }}{% endif %}</h1></center>
+
+<center><h1>Your Favourite Books</h1></center>
 
 <form method="get" action="" class="search-form">
-    <input type="hidden" name="genre_name" value="{{ genre }}">
     <input type="text" name="search" placeholder="Search for a book or author" value="{{ search_query or '' }}">
     <input type="submit" value="Search">
 </form>
@@ -142,37 +133,33 @@
             <th>Author</th>
             <th>Genre</th>
             <th>Image</th>
-            <th>Add to Wishlist</th>
+            <th>Remove from Wishlist</th>
         </tr>
     </thead>
     <tbody>
         {% if books %}
             {% for book in books %}
-            <tr>
+            <tr id="book-{{ book._id }}">
                 <td>{{ book.name }}</td>
                 <td>{{ book.author }}</td>
                 <td>{{ book.genre }}</td>
                 <td><img src="{{ book.image_url }}" alt="{{ book.name }}"></td>
                 <td>
-                    {% if book._id|string in favorite_ids %}
-                    <button class="added-button" disabled>Added</button>
-                    {% else %}
-                    <button class="add-button" onclick="addToWishlist('{{ book._id }}', this)">Add</button>
-                    {% endif %}
+                    <button class="remove-button" onclick="removeFromWishlist('{{ book._id }}', this)">Remove</button>
                 </td>
             </tr>
             {% endfor %}
         {% else %}
             <tr>
-                <td colspan="5">No books found.</td>
+                <td colspan="5">No books found in your wishlist.</td>
             </tr>
         {% endif %}
     </tbody>
 </table>
 
 <script>
-    function addToWishlist(bookId, button) {
-        fetch('/add_to_favourites', {
+    function removeFromWishlist(bookId, button) {
+        fetch('/remove_from_favourites', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -182,10 +169,11 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                button.classList.remove('add-button');
-                button.classList.add('added-button');
-                button.textContent = "Added";
-                button.disabled = true;
+                // Remove the book row from the table
+                const bookRow = document.getElementById(`book-${bookId}`);
+                if (bookRow) {
+                    bookRow.remove();
+                }
             } else {
                 alert(data.message);
             }
