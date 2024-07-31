@@ -84,41 +84,41 @@
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/">United Bookworms</a>
+<nav class="navbar navbar-expand-lg" style="background-color: #f4afa4;">
+    <a class="navbar-brand" href="/" style="color: black; font-size: 20px;">United Bookworms</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/home">Home</a>
+                <a class="nav-link" href="/home" style="color: black; font-size: 18px;">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/genre">Genres</a>
+                <a class="nav-link" href="/genre" style="color: black; font-size: 18px;">Genres</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/favourites">Wishlist</a>
+                <a class="nav-link" href="/favourites" style="color: black; font-size: 18px;">Wishlist</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/contact">Contact</a>
+                <a class="nav-link" href="/contact" style="color: black; font-size: 18px;">Contact</a>
             </li>
             {% if session.email %}
             <li class="nav-item">
-                <a class="nav-link" href="/logout">Logout</a>
+                <a class="nav-link" href="/logout" style="color: black; font-size: 18px;">Logout</a>
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link" href="/">Login</a>
+                <a class="nav-link" href="/" style="color: black; font-size: 18px;">Login</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/register">Register</a>
+                <a class="nav-link" href="/register" style="color: black; font-size: 18px;">Register</a>
             </li>
             {% endif %}
         </ul>
     </div>
 </nav>
-
+<br>
 <center><h1>Your Favourite Books</h1></center>
 
 <form method="get" action="" class="search-form">
