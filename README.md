@@ -21,3 +21,5 @@ This feature ensures that all relevant data is efficiently organized and accessi
 **Logout**
 ## Technologies Used
 **HTML** (Hypertext Markup Language), **CSS** (Cascading Style Sheets), and **JavaScript** are the three languages used to build a website's front end. The backend framework written in **python** is **Flask**. The database used to store details of user for registering into website is **Mongodb**.
+## Demo
+
